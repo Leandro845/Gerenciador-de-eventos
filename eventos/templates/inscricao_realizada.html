@@ -1,0 +1,14 @@
+{% extends 'base_evento.html' %}
+
+
+{% block 'conteudo' %}
+
+{% if messages %}
+{% for msg in messages %}
+<div class="alert {{ msg.tags }}" role="alert">
+    {{ msg }}
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

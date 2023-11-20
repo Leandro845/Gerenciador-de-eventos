@@ -1,0 +1,21 @@
+<form action="{% url 'login' %}" method="POST">{% csrf_token %}
+
+                         {% if messages %}
+                         {% for msg in messages %}
+                         <div class="alert {{ msg.tags }}}" role="alert">
+                            {{ msg }}
+                         </div>
+                         {% endfor %}
+                         {% endif %}
+
+                        <label>Username:</label>
+                        <input type="text" class="form-control" placeholder="Username..." name="username">
+                        <br>
+                        <label>Senha</label>
+                        <input type="password" class="form-control" placeholder="Senha..." name="senha">
+
+                        <a href="{% url 'cadastro' %}" class="link">Cadastre-se</a>
+                        <br>
+                        <br>
+                        <input type="submit" value="LOGAR" class="btn-principal">
+</form>

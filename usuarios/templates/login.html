@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block 'head' %}
 
 <link href="{% static 'usuarios/css/usuarios.css' %}" rel="stylesheet">
 
 {% endblock %}
 
+
 {% block 'body' %}
 
-    <div class="container-fluid bg-inscricao">
+  <div class="container-fluid bg-inscricao">
 
         <div class="row">
             <div class="col-md">
                 <h3 class="logo">Type.Event</h3>
 
-                    {% include 'parciais/_form_cadastro.html' %}
+                     {% include 'parciais/_form_login.html' %}
 
-                <img src="{% static 'geral/img/logo.png' %}" class="logo-evento">
+                <img src="{% static 'geral/img/logo_evento.png' %}" class="logo-evento">
 
             </div>
 
@@ -26,6 +28,6 @@
             </div>
 
         </div>
-    </div>
+  </div>
 
 {% endblock %}
