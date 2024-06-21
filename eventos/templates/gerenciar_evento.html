@@ -1,54 +1,55 @@
-{% extends "base_evento.html" %}
-{% load static %}
+{% extends "base_evento.html" %}  <!-- Extend the base_evento.html template -->
 
-{% block 'importacoes' %}
-    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">
+{% load static %}  <!-- Load static files -->
+
+{% block 'importacoes' %}  <!-- Block for additional imports -->
+    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">  <!-- Link to custom CSS -->
 {% endblock %}
 
-{% block 'conteudo' %}
-    <div class="container">
-        <br>
-        <div class="row">
-            <div class="col-md">
-                <form action="{% url 'gerenciar_evento' %}" method="GET">
-                <label>Título:</label>
-                <input type="text" placeholder="Título..." class="form-control" name="nome">
+{% block 'conteudo' %}  <!-- Block for main content -->
+    <div class="container">  <!-- Bootstrap container -->
+        <br>  <!-- Line break -->
+        <div class="row">  <!-- Bootstrap row -->
+            <div class="col-md">  <!-- Bootstrap column -->
+                <form action="{% url 'gerenciar_evento' %}" method="GET">  <!-- Form for filtering events -->
+                    <label>Título:</label>  <!-- Label for search input -->
+                    <input type="text" placeholder="Título..." class="form-control" name="nome">  <!-- Search input field -->
             </div>
 
-            <div class="col-md">
-                <br>
-                <input type="submit" class="btn-principal" value="filtrar">
-                </form>
+            <div class="col-md">  <!-- Bootstrap column -->
+                <br>  <!-- Line break -->
+                <input type="submit" class="btn-principal" value="filtrar">  <!-- Submit button for filtering -->
+                </form>  <!-- End of form -->
             </div>
+        </div>  <!-- End of row -->
 
-        </div>
-        <table>
-            <tr>
-                <th>Logo</th>
-                <th>Título</th>
-                <th>Descrição</th>
-                <th>Início</th>
-                <th>Término</th>
-                <th>Link de inscrição</th>
+        <table>  <!-- Table for displaying events -->
+            <tr>  <!-- Table row for headers -->
+                <th>Logo</th>  <!-- Header for logo -->
+                <th>Título</th>  <!-- Header for title -->
+                <th>Descrição</th>  <!-- Header for description -->
+                <th>Início</th>  <!-- Header for start date -->
+                <th>Término</th>  <!-- Header for end date -->
+                <th>Link de inscrição</th>  <!-- Header for registration link -->
             </tr>
 
-            {% if eventos %}
-            {% for evento in eventos %}
-            <tr class="{% cycle 'linha' 'linha2' %}">
+            {% if eventos %}  <!-- Check if there are events -->
+            {% for evento in eventos %}  <!-- Loop through each event -->
+            <tr class="{% cycle 'linha' 'linha2' %}">  <!-- Table row with alternating classes -->
                 <td width="10%"><a href="{% url 'participantes_evento' evento.id %}"><img width="100%" src="{{ evento.logo.url }}"></a></td>
-                <td>{{ evento.nome }}</td>
-                <td>{{ evento.descricao }}</td>
-                <td>{{ evento.data_inicio }}</td>
-                <td>{{ evento.data_termino }}</td>
+                <!-- Display event logo with link to participants page -->
+                <td>{{ evento.nome }}</td>  <!-- Display event name -->
+                <td>{{ evento.descricao }}</td>  <!-- Display event description -->
+                <td>{{ evento.data_inicio }}</td>  <!-- Display event start date -->
+                <td>{{ evento.data_termino }}</td>  <!-- Display event end date -->
                 <td>
-                    <a href='{% url "inscrever_evento" evento.id %}'>Inscrever Evento</a>
+                    <a href='{% url "inscrever_evento" evento.id %}'>Inscrever Evento</a>  <!-- Link to register for the event -->
                 </td>
             </tr>
             {% endfor %}
             {% endif %}
 
-        </table>
+        </table>  <!-- End of table -->
 
-    </div>
-
+    </div>  <!-- End of container -->
 {% endblock %}

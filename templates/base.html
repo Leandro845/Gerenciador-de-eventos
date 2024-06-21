@@ -1,18 +1,28 @@
-{% load static %}
+{% load static %}  <!-- Load the static template tag library -->
+
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">  <!-- Character encoding for the document -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- Responsive viewport settings -->
 
-    <title>{% block 'title' %}{% endblock %}</title>
-    <link href="{% static 'geral/css/base.css' %}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    {% block 'head' %}{% endblock %}
+  <title>{% block title %}{% endblock %}</title>  <!-- Title block for dynamic title -->
+  
+  <!-- Link to base.css file from static files -->
+  <link href="{% static 'geral/css/base.css' %}" rel="stylesheet">
+  
+  <!-- Link to Bootstrap CSS from CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  {% block head %}{% endblock %}  <!-- Additional head content block -->
 
-  </head>
-  <body>
-    {% block 'body' %}{% endblock %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+</head>
+<body>
+
+{% block body %}{% endblock %}  <!-- Main body content block -->
+
+<!-- Bootstrap JS from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>

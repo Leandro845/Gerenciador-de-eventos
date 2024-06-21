@@ -1,35 +1,35 @@
-{% extends "base_evento.html" %}
-{% load static %}
+{% extends "base_evento.html" %}  <!-- Extend the base_evento.html template -->
 
-{% block 'importacoes' %}
-    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">
+{% load static %}  <!-- Load the static template tag library for static files -->
+
+{% block importacoes %}  <!-- Block for additional imports -->
+    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">  <!-- Link to custom CSS for this template -->
 {% endblock %}
 
-{% block 'conteudo' %}
+{% block conteudo %}  <!-- Block for main content -->
     <div class="container">
         <br>
         {% if messages %}
             {% for message in messages %}
-                <div class="alert {{ message.tags }}">{{ message }}</div>
+                <div class="alert {{ message.tags }}">{{ message }}</div>  <!-- Display messages with appropriate tags -->
             {% endfor %}
         {% endif %}
         <br>
         <div class="row">
             <div class="col-md-2">
-                <img width="100%" src="/media/{{evento.logo}}">
+                <img width="100%" src="/media/{{ evento.logo }}">  <!-- Display event logo -->
                 <br>
                 <br>
-                <h3>{{evento.nome}}</h3>
-
+                <h3>{{ evento.nome }}</h3>  <!-- Display event name -->
             </div>
 
             <div class="col-md">
                 <div class="row">
                     <div class="col-md-2">
-                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="">Participantes</a></span>
+                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="">Participantes</a></span>  <!-- Placeholder link for participants -->
                     </div>
                     <div class="col-md-2">
-                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="">Certificados</a></span>
+                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="">Certificados</a></span>  <!-- Placeholder link for certificates -->
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
         <hr>
 
         <div class="row">
-            <h5>{{evento.participantes.all.count}} Participantes</h5>
+            <h5>{{ evento.participantes.all.count }} Participantes</h5>  <!-- Display number of participants -->
 
             <div class="col-md-4">
                 <table>
@@ -47,26 +47,23 @@
                     </tr>
                     {% for participante in participantes %}
                         <tr class="{% cycle 'linha' 'linha2' %}">
-                            <td>{{participante.username}}</td>
-                            <td>{{participante.email}}</td>
+                            <td>{{ participante.username }}</td>  <!-- Display participant's username -->
+                            <td>{{ participante.email }}</td>  <!-- Display participant's email -->
                         </tr>
                     {% endfor %}
                 </table>
                 <br>
                 <div class="row">
                     <div class="col-md text-center">
-                        <p>X de Z</p>
+                        <p>X de Z</p>  <!-- Placeholder for number of participants out of total -->
                     </div>
 
-                    <div class="col-md ">
-                        <a href="{% url 'gerar_csv' evento.id %}" class="btn-principal" style="text-decoration: none;">Exportar CSV</a>
+                    <div class="col-md">
+                        <a href="{% url 'gerar_csv' evento.id %}" class="btn-principal" style="text-decoration: none;">Exportar CSV</a>  <!-- Link to export CSV file for participants -->
                     </div>
                 </div>
             </div>
 
         </div>
-
-
     </div>
-
 {% endblock %}

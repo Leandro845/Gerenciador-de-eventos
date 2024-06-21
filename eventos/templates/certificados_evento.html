@@ -1,60 +1,58 @@
-{% extends "base_evento.html" %}
-{% load static %}
+{% extends "base_evento.html" %}  <!-- Extend the base_evento.html template -->
 
-{% block 'importacoes' %}
-    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">
+{% load static %}  <!-- Load static files -->
+
+{% block 'importacoes' %}  <!-- Block for additional imports -->
+    <link href="{% static 'evento/css/gerenciar_evento.css' %}" rel="stylesheet">  <!-- Link to custom CSS -->
 {% endblock %}
 
-{% block 'conteudo' %}
-    <div class="container">
-        <br>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert {{ message.tags }}">{{ message }}</div>
+{% block 'conteudo' %}  <!-- Block for main content -->
+    <div class="container">  <!-- Bootstrap container -->
+        <br>  <!-- Line break -->
+        {% if messages %}  <!-- Check if there are messages -->
+            {% for message in messages %}  <!-- Loop through each message -->
+                <div class="alert {{ message.tags }}">{{ message }}</div>  <!-- Display alert message -->
             {% endfor %}
         {% endif %}
-        <br>
-        <div class="row">
-            <div class="col-md-2">
-                <img width="100%" src="/media/{{ evento.logo }}">
-                <br>
-                <br>
-                <h3>{{ evento.nome }}</h3>
-                
+        <br>  <!-- Line break -->
+        <div class="row">  <!-- Bootstrap row -->
+            <div class="col-md-2">  <!-- Bootstrap column -->
+                <img width="100%" src="/media/{{ evento.logo }}">  <!-- Display event logo -->
+                <br>  <!-- Line break -->
+                <br>  <!-- Line break -->
+                <h3>{{ evento.nome }}</h3>  <!-- Display event name -->
             </div>
 
-            <div class="col-md">
-                <div class="row">
-                    <div class="col-md-2">
-                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="{% url 'certificados_evento' evento.id %}">Participantes</a></span>
+            <div class="col-md">  <!-- Bootstrap column -->
+                <div class="row">  <!-- Nested row -->
+                    <div class="col-md-2">  <!-- Nested Bootstrap column -->
+                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="{% url 'certificados_evento' evento.id %}">Participantes</a></span>  <!-- Link to participants page -->
                     </div>
-                    <div class="col-md-2">
-                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="{% url 'certificados_evento' evento.id %}">Certificados</a></span>
+                    <div class="col-md-2">  <!-- Nested Bootstrap column -->
+                        <span class="badge rounded-pill text-bg-danger"><a class="link" href="{% url 'certificados_evento' evento.id %}">Certificados</a></span>  <!-- Link to certificates page -->
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
+        <hr>  <!-- Horizontal line -->
 
-        <div class="row">
-            <h5>{{ qtd_certificados }} Certificados para serem gerados</h5>
-            {% if qtd_certificados > 0 %}
-                <a href="{% url 'gerar_certificado' evento.id %}" class="btn-principal link" style="width: 40%">GERAR TODOS OS CERTIFICADOS</a>
+        <div class="row">  <!-- Bootstrap row -->
+            <h5>{{ qtd_certificados }} Certificados para serem gerados</h5>  <!-- Display number of certificates to generate -->
+            {% if qtd_certificados > 0 %}  <!-- Check if there are certificates to generate -->
+                <a href="{% url 'gerar_certificado' evento.id %}" class="btn-principal link" style="width: 40%">GERAR TODOS OS CERTIFICADOS</a>  <!-- Link to generate all certificates -->
             {% endif %}
         </div>
-        <hr>
+        <hr>  <!-- Horizontal line -->
 
-        <div class="row">
-            <h5>Procurar certificado</h5>
-            <br>
-            <form action="{% url 'procurar_certificado' evento.id %}" method="POST">
-                <input type="email" class="form-control" placeholder="Digite o e-mail" name="email">{% csrf_token %}
-                <br>
-                <input type="submit" value="BUSCAR" class="btn btn-primary">
+        <div class="row">  <!-- Bootstrap row -->
+            <h5>Procurar certificado</h5>  <!-- Header for searching certificates -->
+            <br>  <!-- Line break -->
+            <form action="{% url 'procurar_certificado' evento.id %}" method="POST">  <!-- Form to search for certificates -->
+                <input type="email" class="form-control" placeholder="Digite o e-mail" name="email">{% csrf_token %}  <!-- Email input field -->
+                <br>  <!-- Line break -->
+                <input type="submit" value="BUSCAR" class="btn btn-primary">  <!-- Submit button to search -->
             </form>
         </div>
-        
-        
-    </div>
 
+    </div>  <!-- End of container -->
 {% endblock %}
