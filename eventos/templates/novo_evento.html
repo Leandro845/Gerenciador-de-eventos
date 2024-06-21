@@ -1,60 +1,58 @@
-{% extends 'base_evento.html' %}
+{% extends 'base_evento.html' %}  <!-- Extend the base_evento.html template -->
 
-{% block 'conteudo' %}
+{% block conteudo %}  <!-- Block for main content -->
     <div class="container">
         <div class="row">
             <div class="col-md-7">
                 <br>
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert {{ message.tags }}">{{ message }}</div>
+                        <div class="alert {{ message.tags }}">{{ message }}</div>  <!-- Display messages with appropriate tags -->
                     {% endfor %}
                 {% endif %}
                 <br>
-                <h3>Novo evento</h3>
+                <h3>Novo evento</h3>  <!-- Heading for new event form -->
                 <form action="{% url 'novo_evento' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
                     <label>Nome evento</label>
-                    <input type="text" name="nome" class="form-control" placeholder="Nome...">
+                    <input type="text" name="nome" class="form-control" placeholder="Nome...">  <!-- Input field for event name -->
                     <br>
                     <label>Descrição</label>
-                    <textarea name="descricao" class="form-control" placeholder="Descrição..."></textarea>
+                    <textarea name="descricao" class="form-control" placeholder="Descrição..."></textarea>  <!-- Textarea for event description -->
                     <br>
                     <div class="row">
                         <div class="col-md">
                             <label>Data início</label>
-                            <input type="date" name="data_inicio" class="form-control">
+                            <input type="date" name="data_inicio" class="form-control">  <!-- Input field for event start date -->
                         </div>
                         <div class="col-md">
                             <label>Data término</label>
-                            <input type="date" name="data_termino" class="form-control">
+                            <input type="date" name="data_termino" class="form-control">  <!-- Input field for event end date -->
                         </div>
                     </div>
                     <br>
                     <label>Carga horária (em horas)</label>
-                    <input type="number" name="carga_horaria" class="form-control" placeholder="X horas">
+                    <input type="number" name="carga_horaria" class="form-control" placeholder="X horas">  <!-- Input field for event duration in hours -->
                     <br>
                     <label>Logo do evento</label>
-                    <input type="file" name="logo" class="form-control">
-
+                    <input type="file" name="logo" class="form-control">  <!-- File input for event logo -->
             </div>
 
             <div style="z-index: 99999" class="col-md">
                 <br>
                 <br>
-                <h3>Paleta de cores</h3>
+                <h3>Paleta de cores</h3>  <!-- Heading for color palette -->
                 <br>
-                <input type="color" name="cor_principal" value="#15773b"> <span>Cor principal</span>
+                <input type="color" name="cor_principal" value="#15773b"> <span>Cor principal</span>  <!-- Color input for primary color -->
                 <br>
-                <input type="color" name="cor_secundaria" value="#14e9e9"> <span>Cor secundária</span>
+                <input type="color" name="cor_secundaria" value="#14e9e9"> <span>Cor secundária</span>  <!-- Color input for secondary color -->
                 <br>
-                <input type="color" name="cor_fundo" value="#020202"> <span>Cor de fundo</span>
+                <input type="color" name="cor_fundo" value="#020202"> <span>Cor de fundo</span>  <!-- Color input for background color -->
                 <br>
                 <br>
-                <input type="submit" class="btn-principal" value="Criar evento">
+                <input type="submit" class="btn-principal" value="Criar evento">  <!-- Submit button to create the event -->
                 </form>
             </div>
             <form>
         </div>
     </div>
-
 {% endblock %}

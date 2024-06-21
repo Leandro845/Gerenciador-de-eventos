@@ -1,14 +1,11 @@
-{% extends 'base_evento.html' %}
+{% extends 'base_evento.html' %}  <!-- Extend the base_evento.html template -->
 
-
-{% block 'conteudo' %}
-
-{% if messages %}
-{% for msg in messages %}
-<div class="alert {{ msg.tags }}" role="alert">
-    {{ msg }}
-</div>
-{% endfor %}
-{% endif %}
-
+{% block 'conteudo' %}  <!-- Block for main content -->
+    {% if messages %}  <!-- Check if there are messages -->
+        {% for msg in messages %}  <!-- Iterate through each message -->
+            <div class="alert {{ msg.tags }}" role="alert">  <!-- Display alert with appropriate tags -->
+                {{ msg }}  <!-- Display the message content -->
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

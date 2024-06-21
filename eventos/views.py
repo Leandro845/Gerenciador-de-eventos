@@ -1,25 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Evento
-from .models import Certificado
-from django.contrib import messages
-from django.contrib.messages import constants
-from django.http import Http404
-import csv
-from secrets import token_urlsafe
-from django.conf.urls.static import settings
-import os
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from PIL import Image, ImageDraw, ImageFont
-import sys
-from django.urls import reverse
+from .models import Evento, Certificado  # Importing models Evento and Certificado
+from django.contrib import messages  # Importing messages framework
+from django.contrib.messages import constants  # Importing message constants
+from django.http import Http404  # Importing Http404 exception
+import csv  # Importing CSV module for CSV operations
+from secrets import token_urlsafe  # Importing token_urlsafe from secrets module
+from django.conf.urls.static import settings  # Importing Django settings for static files
+import os  # Importing os module for system-level operations
+from io import BytesIO  # Importing BytesIO for in-memory file operations
+from django.core.files.uploadedfile import InMemoryUploadedFile  # Importing InMemoryUploadedFile for file uploads
+from PIL import Image, ImageDraw, ImageFont  # Importing PIL modules for image processing
+import sys  # Importing sys module for system-specific parameters and functions
+from django.urls import reverse  # Importing reverse function from Django URLs
 
 @login_required
 def novo_evento(request):
+    """View function for creating a new event."""
     if request.method == 'GET':
-        return render(request, 'novo_evento.html')
+        return render(request, 'novo_evento.html')  # Render the form to create a new event
     elif request.method == 'POST':
+        # Extract data from POST request
         nome_evento = request.POST.get('nome')
         descricao = request.POST.get('descricao')
         data_inicio = request.POST.get('data_inicio')
@@ -31,6 +32,7 @@ def novo_evento(request):
         cor_secundaria = request.POST.get('cor_secundaria')
         cor_fundo = request.POST.get('cor_fundo')
 
+        # Create new Evento object and save to database
         evento = Evento(
             criador=request.user,
             nome=nome_evento,
@@ -45,18 +47,20 @@ def novo_evento(request):
         )
         evento.save()
 
-        messages.add_message(request, constants.SUCCESS, 'Evento criado com sucesso')
+        # Add success message and redirect to the same page
+        messages.add_message(request, constants.SUCCESS, 'Event created successfully')
         return redirect('novo_evento')
 
 @login_required
 def gerenciar_evento(request):
+    """View function for managing events."""
     if request.method == 'GET':
         nome = request.GET.get('nome')
 
         eventos = Evento.objects.filter(criador=request.user)
 
-        # To do: realizar outros filtros
-
+        # TODO: Add additional filters
+        
         if nome:
             eventos = eventos.filter(nome__contains=nome)
 
@@ -64,74 +68,87 @@ def gerenciar_evento(request):
 
 @login_required
 def inscrever_evento(request, id):
+    """View function for registering for an event."""
     evento = get_object_or_404(Evento, id=id)
     if request.method == 'GET':
         return render(request, 'inscrever_evento.html', {'evento': evento})
     elif request.method == 'POST':
+        # Add current user to event participants and save
         evento.participantes.add(request.user)
         evento.save()
-        messages.add_message(request, constants.SUCCESS, 'Inscrição realizada com sucesso')
-        return redirect('inscicao_realizada')
+        messages.add_message(request, constants.SUCCESS, 'Registration successful')
+        return redirect('inscricao_realizada')
 
 def inscricao_realizada(request):
+    """View function for displaying registration success."""
     return render(request, 'inscricao_realizada.html')
 
 def participantes_evento(request, id):
+    """View function for displaying participants of an event."""
     evento = get_object_or_404(Evento, id=id)
     if evento.criador == request.user:
         if request.method == 'GET':
             participantes = evento.participantes.all()
             return render(request, 'participantes_eventos.html',
-                          {'participantes': participantes, 'evento': evento}
-                          )
+                          {'participantes': participantes, 'evento': evento})
     else:
-        raise Http404('Esse evento não é seu')
-
+        raise Http404('This event is not yours')
 
 def gerar_csv(request, id):
+    """View function for generating a CSV file of event participants."""
     evento = get_object_or_404(Evento, id=id)
     if not evento.criador == request.user:
-        raise Http404('Esse evento não é seu')
+        raise Http404('This event is not yours')
     participantes = evento.participantes.all()
 
+    # Generate a unique token for the CSV file
     token = f'{token_urlsafe(6)}.csv'
     path = os.path.join(settings.MEDIA_ROOT, token)
 
+    # Write participants' data to CSV file
     with open(path, 'w') as arq:
         writer = csv.writer(arq, delimiter=",")
         for participante in participantes:
-            x = (participante.username, participante.email)
-            writer.writerow(x)
+            data_row = (participante.username, participante.email)
+            writer.writerow(data_row)
 
     return redirect(f'/media/{token}')
 
-
 def certificados_evento(request, id):
+    """View function for displaying event certificates."""
     evento = get_object_or_404(Evento, id=id)
     if not evento.criador == request.user:
-        raise Http404('Esse evento não é seu')
+        raise Http404('This event is not yours')
     if request.method == 'GET':
+        # Calculate remaining certificates to be generated
         qtd_certificados = evento.participantes.all().count() - Certificado.objects.filter(evento=evento).count()
         return render(request, 'certificados_evento.html', {'evento': evento, 'qtd_certificados': qtd_certificados})
 
-
 def gerar_certificado(request, id):
+    """View function for generating certificates for event participants."""
     evento = get_object_or_404(Evento, id=id)
     if not evento.criador == request.user:
-        raise Http404('Esse evento não é seu')
+        raise Http404('This event is not yours')
 
+    # Paths for template and font files
     path_template = os.path.join(settings.BASE_DIR, 'templates/static/evento/img/template_certificado.png')
     path_fonte = os.path.join(settings.BASE_DIR, 'templates/static/fontes/arimo.ttf')
+
     for participante in evento.participantes.all():
-        # TODO: Validar se já existe certificado desse participante para esse evento
+        # TODO: Validate if certificate already exists for this participant and event
+        
+        # Load certificate template image
         img = Image.open(path_template)
-        path_template = os.path.join(settings.BASE_DIR, 'templates/static/evento/img/template_certificado.png')
         draw = ImageDraw.Draw(img)
+
+        # Load fonts and add text to certificate
         fonte_nome = ImageFont.truetype(path_fonte, 60)
         fonte_info = ImageFont.truetype(path_fonte, 30)
         draw.text((230, 651), f"{participante.username}", font=fonte_nome, fill=(0, 0, 0))
         draw.text((761, 782), f"{evento.nome}", font=fonte_info, fill=(0, 0, 0))
-        draw.text((816, 849), f"{evento.carga_horario} horas", font=fonte_info, fill=(0, 0, 0))
+        draw.text((816, 849), f"{evento.carga_horario} hours", font=fonte_info, fill=(0, 0, 0))
+
+        # Save generated certificate to in-memory file
         output = BytesIO()
         img.save(output, format="PNG", quality=100)
         output.seek(0)
@@ -141,6 +158,8 @@ def gerar_certificado(request, id):
                                          'image/jpeg',
                                          sys.getsizeof(output),
                                          None)
+
+        # Create Certificado object and save to database
         certificado_gerado = Certificado(
             certificado=img_final,
             participantes=participante,
@@ -148,20 +167,20 @@ def gerar_certificado(request, id):
         )
         certificado_gerado.save()
 
-    messages.add_message(request, constants.SUCCESS, 'Certificados gerados')
-    return redirect('certificados_evento.html', kwargs={'id': evento.id})
-
+    messages.add_message(request, constants.SUCCESS, 'Certificates generated')
+    return redirect('certificados_evento', kwargs={'id': evento.id})
 
 def procurar_certificado(request, id):
+    """View function for searching a certificate by email."""
     evento = get_object_or_404(Evento, id=id)
     if not evento.criador == request.user:
-        raise Http404('Esse evento não é seu')
+        raise Http404('This event is not yours')
+
     email = request.POST.get('email')
     certificado = Certificado.objects.filter(evento=evento).filter(participantes__email=email).first()
+
     if not certificado:
-        messages.add_message(
-            request, constants.ERROR, 'Certificado não encontrado'
-        )
+        messages.add_message(request, constants.ERROR, 'Certificate not found')
         return redirect(reverse('certificados_evento', kwargs={'id': evento.id}))
 
     return redirect(certificado.certificado.url)

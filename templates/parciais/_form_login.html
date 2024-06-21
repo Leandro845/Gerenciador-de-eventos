@@ -1,21 +1,24 @@
-<form action="{% url 'login' %}" method="POST">{% csrf_token %}
+<form action="{% url 'login' %}" method="POST">  <!-- Formulario com ação para a URL 'login' e método POST -->
+   {% csrf_token %}  <!-- CSRF token para proteção contra ataques CSRF -->
 
-                         {% if messages %}
-                         {% for msg in messages %}
-                         <div class="alert {{ msg.tags }}}" role="alert">
-                            {{ msg }}
-                         </div>
-                         {% endfor %}
-                         {% endif %}
+   {% if messages %}  <!-- Verifica se há mensagens para exibir -->
+       {% for msg in messages %}  <!-- Loop pelas mensagens -->
+           <div class="alert {{ msg.tags }}" role="alert">  <!-- Div para exibir mensagem com classe CSS dinâmica -->
+               {{ msg }}  <!-- Exibe a mensagem -->
+           </div>
+       {% endfor %}
+   {% endif %}
 
-                        <label>Username:</label>
-                        <input type="text" class="form-control" placeholder="Username..." name="username">
-                        <br>
-                        <label>Senha</label>
-                        <input type="password" class="form-control" placeholder="Senha..." name="senha">
+   <label>Username:</label>  <!-- Rótulo para campo de username -->
+   <input type="text" class="form-control" placeholder="Username..." name="username">  <!-- Campo de texto para username -->
+   <br>
 
-                        <a href="{% url 'cadastro' %}" class="link">Cadastre-se</a>
-                        <br>
-                        <br>
-                        <input type="submit" value="LOGAR" class="btn-principal">
+   <label>Senha:</label>  <!-- Rótulo para campo de senha -->
+   <input type="password" class="form-control" placeholder="Senha..." name="senha">  <!-- Campo de senha -->
+
+   <a href="{% url 'cadastro' %}" class="link">Cadastre-se</a>  <!-- Link para a página de cadastro -->
+   <br>
+   <br>
+
+   <input type="submit" value="LOGAR" class="btn-principal">  <!-- Botão de submit para enviar o formulário -->
 </form>
